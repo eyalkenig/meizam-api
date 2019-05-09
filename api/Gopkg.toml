@@ -32,3 +32,8 @@
 [[constraint]]
   name = "github.com/spf13/cobra"
   version = "0.0.3"
+
+[metadata.heroku]
+  root-package = "github.com/eyalkenig/meizam-api/api"
+  go-version = "go1.11.2"
+  ensure = "true"
