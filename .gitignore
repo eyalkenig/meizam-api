@@ -1,0 +1,6 @@
+app/build/out/
+
+vendor
+
+.idea/
+*.iml
