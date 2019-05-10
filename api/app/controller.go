@@ -2,11 +2,18 @@ package app
 
 import (
 	"encoding/json"
+	"github.com/eyalkenig/meizam-api/api/app/service"
 	"log"
 	"net/http"
 )
 
-type Controller struct{}
+func NewController(service service.Service) *Controller {
+	return &Controller{service}
+}
+
+type Controller struct {
+	service service.Service
+}
 
 type Test struct {
 	Name string `json:"name"`
