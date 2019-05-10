@@ -75,9 +75,9 @@ func encodeResponse(w http.ResponseWriter, response interface{}) {
 func handleServerError(w http.ResponseWriter, err error) {
 	w.WriteHeader(http.StatusInternalServerError)
 	errorMessage := &ErrorMessage{error: err.Error()}
-	kaka := json.NewEncoder(w).Encode(errorMessage)
-	if kaka != nil {
+	encodedError := json.NewEncoder(w).Encode(errorMessage)
+	if encodedError != nil {
 		log.Printf("encoded with error: %s", err.Error())
-		log.Printf("encoded with error error: %s", kaka.Error())
+		log.Printf("failed to encode with error: %s original error: %s", encodedError.Error(), err)
 	}
 }
