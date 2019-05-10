@@ -24,13 +24,19 @@ func NewRESTCommand(port string) *cobra.Command {
 
 func getRESTRunFunction(port string) func(cmd *cobra.Command, args []string) {
 	return func(cmd *cobra.Command, args []string) {
-		router := app.NewRouter()
+		container := app.NewContainer()
+		application, err := container.Resolve()
+
+		if err != nil {
+			log.Fatal(fmt.Sprintf("failed to resolve app: %s", err.Error()))
+		}
+
 		allowedOrigins := handlers.AllowedOrigins([]string{"*"})
 		allowedMethods := handlers.AllowedMethods([]string{"GET", "POST", "DELETE", "PUT"})
 
 		go func() {
 			log.Println("Starting application server")
-			log.Fatal(http.ListenAndServe(":"+port, handlers.CORS(allowedOrigins, allowedMethods)(router)))
+			log.Fatal(http.ListenAndServe(":"+port, handlers.CORS(allowedOrigins, allowedMethods)(application.Router)))
 		}()
 
 		signalsChan := make(chan os.Signal)

@@ -16,18 +16,8 @@ type Route struct {
 
 type Routes []Route
 
-var controller = &Controller{}
-
-var routes = Routes{
-	Route{
-		"test",
-		"GET",
-		"/test",
-		controller.Test,
-	},
-}
-
-func NewRouter() *mux.Router {
+func NewRouter(controller *Controller) *mux.Router {
+	routes := defineRoutes(controller)
 	router := mux.NewRouter().StrictSlash(true)
 	for _, route := range routes {
 		var handler http.Handler
@@ -41,4 +31,22 @@ func NewRouter() *mux.Router {
 			Handler(handler)
 	}
 	return router
+}
+
+func defineRoutes(controller *Controller) []Route {
+	var routes = Routes{
+		Route{
+			"ping",
+			"GET",
+			"/ping",
+			controller.Ping,
+		},
+		Route{
+			"create team",
+			"POST",
+			"/teams",
+			controller.CreateTeam,
+		},
+	}
+	return routes
 }

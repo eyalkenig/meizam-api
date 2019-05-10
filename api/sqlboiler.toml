@@ -1,0 +1,8 @@
+[mysql]
+   blacklist = ["schema_migrations"]
+   dbname  = "meizamDB"
+   host    = "meizam2020.c0m3ynv9myra.eu-central-1.rds.amazonaws.com"
+   port    = 3306
+   user    = "meizam"
+   pass    = "meiZam2020"
+   sslmode = "false"
