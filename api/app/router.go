@@ -36,10 +36,10 @@ func NewRouter(controller *Controller) *mux.Router {
 func defineRoutes(controller *Controller) []Route {
 	var routes = Routes{
 		Route{
-			"test",
+			"ping",
 			"GET",
-			"/test",
-			controller.Test,
+			"/ping",
+			controller.Ping,
 		},
 	}
 	return routes

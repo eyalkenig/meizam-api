@@ -3,7 +3,6 @@ package app
 import (
 	"encoding/json"
 	"github.com/eyalkenig/meizam-api/api/app/service"
-	"log"
 	"net/http"
 )
 
@@ -15,12 +14,11 @@ type Controller struct {
 	service service.Service
 }
 
-type Test struct {
-	Name string `json:"name"`
+type Ping struct {
+	Pong string `json:"pong"`
 }
 
-func (controller *Controller) Test(w http.ResponseWriter, req *http.Request) {
-	log.Println("im in controller")
-	test := &Test{Name: "a test"}
+func (controller *Controller) Ping(w http.ResponseWriter, req *http.Request) {
+	test := &Ping{Pong: "ping pong"}
 	json.NewEncoder(w).Encode(test)
 }
