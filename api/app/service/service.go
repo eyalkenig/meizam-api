@@ -1,12 +1,14 @@
 package service
 
+import "github.com/eyalkenig/meizam-api/api/app/repository/mysql/models"
+
 type Service interface {
 	Command
 	Query
 }
 
 type Command interface {
-	CreateTeam(teamName, externalEntityId, imageUrl string) (int, error)
+	CreateTeam(teamName string, externalEntityId, imageUrl *string) (*models.Team, error)
 }
 
 type Query interface {

@@ -26,7 +26,7 @@ import (
 type Team struct {
 	ID               int         `boil:"id" json:"id" toml:"id" yaml:"id"`
 	Name             string      `boil:"name" json:"name" toml:"name" yaml:"name"`
-	ExternalEntityID null.Int    `boil:"external_entity_id" json:"external_entity_id,omitempty" toml:"external_entity_id" yaml:"external_entity_id,omitempty"`
+	ExternalEntityID null.String `boil:"external_entity_id" json:"external_entity_id,omitempty" toml:"external_entity_id" yaml:"external_entity_id,omitempty"`
 	ImageURL         null.String `boil:"image_url" json:"image_url,omitempty" toml:"image_url" yaml:"image_url,omitempty"`
 	CreatedAt        null.Time   `boil:"created_at" json:"created_at,omitempty" toml:"created_at" yaml:"created_at,omitempty"`
 	UpdatedAt        null.Time   `boil:"updated_at" json:"updated_at,omitempty" toml:"updated_at" yaml:"updated_at,omitempty"`
@@ -56,14 +56,14 @@ var TeamColumns = struct {
 var TeamWhere = struct {
 	ID               whereHelperint
 	Name             whereHelperstring
-	ExternalEntityID whereHelpernull_Int
+	ExternalEntityID whereHelpernull_String
 	ImageURL         whereHelpernull_String
 	CreatedAt        whereHelpernull_Time
 	UpdatedAt        whereHelpernull_Time
 }{
 	ID:               whereHelperint{field: `id`},
 	Name:             whereHelperstring{field: `name`},
-	ExternalEntityID: whereHelpernull_Int{field: `external_entity_id`},
+	ExternalEntityID: whereHelpernull_String{field: `external_entity_id`},
 	ImageURL:         whereHelpernull_String{field: `image_url`},
 	CreatedAt:        whereHelpernull_Time{field: `created_at`},
 	UpdatedAt:        whereHelpernull_Time{field: `updated_at`},

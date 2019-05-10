@@ -41,6 +41,12 @@ func defineRoutes(controller *Controller) []Route {
 			"/ping",
 			controller.Ping,
 		},
+		Route{
+			"create team",
+			"POST",
+			"/teams",
+			controller.CreateTeam,
+		},
 	}
 	return routes
 }

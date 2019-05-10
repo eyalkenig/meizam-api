@@ -28,7 +28,7 @@ func getRESTRunFunction(port string) func(cmd *cobra.Command, args []string) {
 		application, err := container.Resolve()
 
 		if err != nil {
-			log.Fatal("failed to resolve app: %s", err.Error())
+			log.Fatal(fmt.Sprintf("failed to resolve app: %s", err.Error()))
 		}
 
 		allowedOrigins := handlers.AllowedOrigins([]string{"*"})
