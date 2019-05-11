@@ -1,6 +1,8 @@
 package app
 
 import (
+	"github.com/eyalkenig/meizam-api/api/app/controller"
+
 	"github.com/gorilla/mux"
 
 	"log"
@@ -16,7 +18,7 @@ type Route struct {
 
 type Routes []Route
 
-func NewRouter(controller *Controller) *mux.Router {
+func NewRouter(controller *controller.Controller) *mux.Router {
 	routes := defineRoutes(controller)
 	router := mux.NewRouter().StrictSlash(true)
 	for _, route := range routes {
@@ -33,7 +35,7 @@ func NewRouter(controller *Controller) *mux.Router {
 	return router
 }
 
-func defineRoutes(controller *Controller) []Route {
+func defineRoutes(controller *controller.Controller) []Route {
 	var routes = Routes{
 		Route{
 			"ping",

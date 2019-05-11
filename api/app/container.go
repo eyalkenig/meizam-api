@@ -3,6 +3,7 @@ package app
 import (
 	"log"
 
+	"github.com/eyalkenig/meizam-api/api/app/controller"
 	"github.com/eyalkenig/meizam-api/api/app/repository/mysql"
 	"github.com/eyalkenig/meizam-api/api/app/service/command"
 	"github.com/eyalkenig/meizam-api/api/app/service/meizam"
@@ -26,7 +27,7 @@ func (container *Container) Resolve() (*Application, error) {
 	commandService := command.NewMeizamCommand(repository)
 	queryService := query.NewMeizamQuery(repository)
 	service := meizam.NewMeizam(commandService, queryService)
-	ctrl := NewController(service)
+	ctrl := controller.NewController(service)
 	router := NewRouter(ctrl)
 
 	return NewApplication(router), nil
