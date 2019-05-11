@@ -36,7 +36,7 @@ func (f *Builder) Build() (*MySQL, error) {
 }
 
 func buildConnectionString(username, password, host, port, database string) string {
-	return fmt.Sprintf("%v:%v@tcp(%v:%v)/%v", username, password, host, port, database)
+	return fmt.Sprintf("%v:%v@tcp(%v:%v)/%v?parseTime=true", username, password, host, port, database)
 }
 func loadConfigObject(configObject interface{}) error {
 	return envconfig.Process("", configObject)
