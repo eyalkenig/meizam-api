@@ -38,7 +38,7 @@ func (mysql *MySQL) ListTeams(limit, offset int) ([]*models.Team, error) {
 	).All(context.Background(), mysql.db)
 
 	if err != nil {
-		log.Println(fmt.Sprintf("Failed listing teams: %s, limit: %s, offset: %s", err.Error(), limit, offset))
+		log.Println(fmt.Sprintf("Failed listing teams: %s, limit: %d, offset: %d", err.Error(), limit, offset))
 		return nil, err
 	}
 	return teams, nil
