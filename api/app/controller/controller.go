@@ -79,7 +79,7 @@ func (controller *Controller) ListTeams(w http.ResponseWriter, req *http.Request
 	}
 	perPageParam := getUrlParamWithDefault(req, "per_page", "10")
 	perPage, err := strconv.Atoi(perPageParam)
-	if err != nil || page < 0 {
+	if err != nil || perPage < 0 {
 		handleServerError(w, errors.New("per_page must be a positive number"))
 		return
 	}
