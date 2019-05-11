@@ -1,17 +1,17 @@
 package cmd
 
 import (
-	"github.com/eyalkenig/meizam-api/api/app"
-
-	"github.com/gorilla/handlers"
-	"github.com/spf13/cobra"
-
 	"fmt"
 	"log"
 	"net/http"
 	"os"
 	"os/signal"
 	"syscall"
+
+	"github.com/eyalkenig/meizam-api/api/app"
+
+	"github.com/gorilla/handlers"
+	"github.com/spf13/cobra"
 )
 
 func NewRESTCommand(port string) *cobra.Command {

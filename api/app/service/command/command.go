@@ -2,6 +2,7 @@ package command
 
 import (
 	"fmt"
+
 	"github.com/eyalkenig/meizam-api/api/app/repository"
 	"github.com/eyalkenig/meizam-api/api/app/repository/mysql/models"
 )

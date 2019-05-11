@@ -1,12 +1,12 @@
 package app
 
 import (
+	"log"
+	"net/http"
+
 	"github.com/eyalkenig/meizam-api/api/app/controller"
 
 	"github.com/gorilla/mux"
-
-	"log"
-	"net/http"
 )
 
 type Route struct {
