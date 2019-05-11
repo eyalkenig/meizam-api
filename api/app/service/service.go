@@ -12,4 +12,5 @@ type Command interface {
 }
 
 type Query interface {
+	ListTeams(limit, offset int) ([]*models.Team, error)
 }

@@ -1,15 +1,16 @@
 package mysql
 
 import (
-	"fmt"
-	"github.com/eyalkenig/meizam-api/api/app/repository/mysql/models"
-	"github.com/volatiletech/null"
-	"log"
-
-	"github.com/volatiletech/sqlboiler/boil"
-
 	"context"
 	"database/sql"
+	"fmt"
+	"log"
+
+	"github.com/eyalkenig/meizam-api/api/app/repository/mysql/models"
+
+	"github.com/volatiletech/null"
+	"github.com/volatiletech/sqlboiler/boil"
+	. "github.com/volatiletech/sqlboiler/queries/qm"
 )
 
 type MySQL struct {
@@ -28,4 +29,17 @@ func (mysql *MySQL) CreateTeam(teamName string, externalEntityId, imageUrl *stri
 		return nil, err
 	}
 	return team, nil
+}
+
+func (mysql *MySQL) ListTeams(limit, offset int) ([]*models.Team, error) {
+	teams, err := models.Teams(
+		Limit(limit),
+		Offset(offset),
+	).All(context.Background(), mysql.db)
+
+	if err != nil {
+		log.Println(fmt.Sprintf("Failed listing teams: %s, limit: %s, offset: %s", err.Error(), limit, offset))
+		return nil, err
+	}
+	return teams, nil
 }
