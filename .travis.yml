@@ -1,0 +1,19 @@
+sudo: required
+
+stages:
+  - test api
+
+jobs:
+  include:
+    - stage: test api
+      language: go
+      go:
+        - 1.12
+      env:
+        - GOOS: linux
+        - GOARCH: amd64
+        - CGO_ENABLED: 0
+      before_script: cd api
+      script:
+        - make gofmt
+        - make test
