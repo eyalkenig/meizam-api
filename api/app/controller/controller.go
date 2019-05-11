@@ -1,12 +1,15 @@
-package app
+package controller
 
 import (
 	"encoding/json"
-	"github.com/eyalkenig/meizam-api/api/app/service"
+	"errors"
 	"io"
 	"io/ioutil"
 	"log"
 	"net/http"
+	"strconv"
+
+	"github.com/eyalkenig/meizam-api/api/app/service"
 )
 
 func NewController(service service.Service) *Controller {
@@ -67,6 +70,30 @@ func (controller *Controller) CreateTeam(w http.ResponseWriter, req *http.Reques
 	encodeResponse(w, team)
 }
 
+func (controller *Controller) ListTeams(w http.ResponseWriter, req *http.Request) {
+	pageUrlParam := getUrlParamWithDefault(req, "page", "0")
+	page, err := strconv.Atoi(pageUrlParam)
+	if err != nil || page < 0 {
+		handleServerError(w, errors.New("page must be a positive number"))
+		return
+	}
+	perPageParam := getUrlParamWithDefault(req, "per_page", "10")
+	perPage, err := strconv.Atoi(perPageParam)
+	if err != nil || perPage < 0 {
+		handleServerError(w, errors.New("per_page must be a positive number"))
+		return
+	}
+	offset := page * perPage
+	teams, err := controller.service.ListTeams(perPage, offset)
+
+	if err != nil {
+		handleServerError(w, err)
+		return
+	}
+
+	encodeResponse(w, teams)
+}
+
 func encodeResponse(w http.ResponseWriter, response interface{}) {
 	w.Header().Set("Content-Type", "application/json; charset=UTF-8")
 	json.NewEncoder(w).Encode(response)
@@ -80,4 +107,13 @@ func handleServerError(w http.ResponseWriter, err error) {
 		log.Printf("encoded with error: %s", err.Error())
 		log.Printf("failed to encode with error: %s original error: %s", encodedError.Error(), err)
 	}
+}
+
+func getUrlParamWithDefault(req *http.Request, param, defaultValue string) string {
+	params := req.URL.Query()
+	queryParam, ok := params[param]
+	if ok && len(queryParam[0]) > 0 {
+		return queryParam[0]
+	}
+	return defaultValue
 }

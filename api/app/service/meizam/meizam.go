@@ -7,12 +7,17 @@ import (
 
 type Meizam struct {
 	commandService service.Command
+	queryService   service.Query
 }
 
-func NewMeizam(command service.Command) *Meizam {
-	return &Meizam{commandService: command}
+func NewMeizam(command service.Command, query service.Query) *Meizam {
+	return &Meizam{commandService: command, queryService: query}
 }
 
 func (service *Meizam) CreateTeam(teamName string, externalEntityId, imageUrl *string) (*models.Team, error) {
 	return service.commandService.CreateTeam(teamName, externalEntityId, imageUrl)
+}
+
+func (service *Meizam) ListTeams(limit, offset int) ([]*models.Team, error) {
+	return service.queryService.ListTeams(limit, offset)
 }

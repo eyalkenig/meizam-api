@@ -8,4 +8,5 @@ type Repository interface {
 
 type realWorldRepository interface {
 	CreateTeam(teamName string, externalEntityId, imageUrl *string) (*models.Team, error)
+	ListTeams(limit, offset int) ([]*models.Team, error)
 }

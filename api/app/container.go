@@ -1,10 +1,13 @@
 package app
 
 import (
+	"log"
+
+	"github.com/eyalkenig/meizam-api/api/app/controller"
 	"github.com/eyalkenig/meizam-api/api/app/repository/mysql"
 	"github.com/eyalkenig/meizam-api/api/app/service/command"
 	"github.com/eyalkenig/meizam-api/api/app/service/meizam"
-	"log"
+	"github.com/eyalkenig/meizam-api/api/app/service/query"
 )
 
 type Container struct{}
@@ -22,8 +25,9 @@ func (container *Container) Resolve() (*Application, error) {
 	}
 
 	commandService := command.NewMeizamCommand(repository)
-	service := meizam.NewMeizam(commandService)
-	ctrl := NewController(service)
+	queryService := query.NewMeizamQuery(repository)
+	service := meizam.NewMeizam(commandService, queryService)
+	ctrl := controller.NewController(service)
 	router := NewRouter(ctrl)
 
 	return NewApplication(router), nil
