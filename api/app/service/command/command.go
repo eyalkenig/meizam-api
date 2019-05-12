@@ -21,3 +21,13 @@ func (command *MeizamCommand) CreateTeam(teamName string, externalEntityId, imag
 	}
 	return command.repository.CreateTeam(teamName, externalEntityId, imageUrl)
 }
+
+func (command *MeizamCommand) CreateCompetition(name, competitionType string, externalEntityId *string) (*models.Competition, error) {
+	if name == "" {
+		return nil, fmt.Errorf("name is mandatory")
+	}
+	if competitionType == "" {
+		return nil, fmt.Errorf("type is mandatory")
+	}
+	return command.repository.CreateCompetition(name, competitionType, externalEntityId)
+}

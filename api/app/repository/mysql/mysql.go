@@ -43,3 +43,13 @@ func (mysql *MySQL) ListTeams(limit, offset int) ([]*models.Team, error) {
 	}
 	return teams, nil
 }
+
+func (mysql *MySQL) CreateCompetition(name, competitionType string, externalEntityId *string) (*models.Competition, error) {
+	competition := &models.Competition{Name: name, Type: competitionType, ExternalEntityID: null.StringFromPtr(externalEntityId)}
+	err := competition.Insert(context.Background(), mysql.db, boil.Infer())
+	if err != nil {
+		log.Println(fmt.Sprintf("Failed creating competition: %s", err.Error()))
+		return nil, err
+	}
+	return competition, nil
+}

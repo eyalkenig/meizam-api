@@ -40,6 +40,17 @@ func (_mr *_MockServiceRecorder) CreateTeam(arg0, arg1, arg2 interface{}) *gomoc
 	return _mr.mock.ctrl.RecordCall(_mr.mock, "CreateTeam", arg0, arg1, arg2)
 }
 
+func (_m *MockService) CreateCompetition(name string, competitionType string, externalEntityId *string) (*models.Competition, error) {
+	ret := _m.ctrl.Call(_m, "CreateCompetition", name, competitionType, externalEntityId)
+	ret0, _ := ret[0].(*models.Competition)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+func (_mr *_MockServiceRecorder) CreateCompetition(arg0, arg1, arg2 interface{}) *gomock.Call {
+	return _mr.mock.ctrl.RecordCall(_mr.mock, "CreateCompetition", arg0, arg1, arg2)
+}
+
 func (_m *MockService) ListTeams(limit int, offset int) ([]*models.Team, error) {
 	ret := _m.ctrl.Call(_m, "ListTeams", limit, offset)
 	ret0, _ := ret[0].([]*models.Team)
@@ -81,6 +92,17 @@ func (_m *MockCommand) CreateTeam(teamName string, externalEntityId *string, ima
 
 func (_mr *_MockCommandRecorder) CreateTeam(arg0, arg1, arg2 interface{}) *gomock.Call {
 	return _mr.mock.ctrl.RecordCall(_mr.mock, "CreateTeam", arg0, arg1, arg2)
+}
+
+func (_m *MockCommand) CreateCompetition(name string, competitionType string, externalEntityId *string) (*models.Competition, error) {
+	ret := _m.ctrl.Call(_m, "CreateCompetition", name, competitionType, externalEntityId)
+	ret0, _ := ret[0].(*models.Competition)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+func (_mr *_MockCommandRecorder) CreateCompetition(arg0, arg1, arg2 interface{}) *gomock.Call {
+	return _mr.mock.ctrl.RecordCall(_mr.mock, "CreateCompetition", arg0, arg1, arg2)
 }
 
 // Mock of Query interface

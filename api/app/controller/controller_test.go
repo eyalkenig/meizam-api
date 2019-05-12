@@ -60,7 +60,7 @@ var _ = Describe("Controller", func() {
 
 			appController.ListTeams(responseRecorder, request)
 
-			Expect(responseRecorder.Code).To(Equal(http.StatusInternalServerError))
+			Expect(responseRecorder.Code).To(Equal(http.StatusBadRequest))
 		})
 		It("Should return error for non-positive per_page", func() {
 			request, _ := http.NewRequest("GET", "/teams", nil)
@@ -71,7 +71,7 @@ var _ = Describe("Controller", func() {
 
 			appController.ListTeams(responseRecorder, request)
 
-			Expect(responseRecorder.Code).To(Equal(http.StatusInternalServerError))
+			Expect(responseRecorder.Code).To(Equal(http.StatusBadRequest))
 		})
 	})
 })

@@ -21,3 +21,6 @@ func (service *Meizam) CreateTeam(teamName string, externalEntityId, imageUrl *s
 func (service *Meizam) ListTeams(limit, offset int) ([]*models.Team, error) {
 	return service.queryService.ListTeams(limit, offset)
 }
+func (service *Meizam) CreateCompetition(name, competitionType string, externalEntityId *string) (*models.Competition, error) {
+	return service.commandService.CreateCompetition(name, competitionType, externalEntityId)
+}
