@@ -55,6 +55,12 @@ func defineRoutes(controller *controller.Controller) []Route {
 			"/teams",
 			controller.ListTeams,
 		},
+		Route{
+			"create competition",
+			"post",
+			"/competitions",
+			controller.CreateCompetition,
+		},
 	}
 	return routes
 }

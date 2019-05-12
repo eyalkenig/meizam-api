@@ -31,6 +31,13 @@ type Team struct {
 	ImageUrl         *string `json:"image_url"`
 }
 
+type Competition struct {
+	ID               int     `json:id`
+	Name             string  `json:"name"`
+	Type             string  `json:"type"`
+	ExternalEntityId *string `json:"external_entity_id"`
+}
+
 func (controller *Controller) Ping(w http.ResponseWriter, req *http.Request) {
 	test := &Ping{Pong: "ping pong"}
 	encodeResponse(w, test)
@@ -46,7 +53,7 @@ func (controller *Controller) CreateTeam(w http.ResponseWriter, req *http.Reques
 	team, err := controller.service.CreateTeam(teamRequest.Name, teamRequest.ExternalEntityId, teamRequest.ImageUrl)
 
 	if err != nil {
-		handleServerError(w, http.StatusInternalServerError , err)
+		handleServerError(w, http.StatusInternalServerError, err)
 		return
 	}
 	encodeResponse(w, team)
@@ -75,6 +82,22 @@ func (controller *Controller) ListTeams(w http.ResponseWriter, req *http.Request
 	}
 
 	encodeResponse(w, teams)
+}
+
+func (controller *Controller) CreateCompetition(w http.ResponseWriter, req *http.Request) {
+	w.Header().Set("Content-Type", "application/json; charset=UTF-8")
+	var competitionRequest Competition
+	if err := getRequestBody(w, req, &competitionRequest); err != nil {
+		return
+	}
+
+	competition, err := controller.service.CreateCompetition(competitionRequest.Name, competitionRequest.Type, competitionRequest.ExternalEntityId)
+
+	if err != nil {
+		handleServerError(w, http.StatusInternalServerError, err)
+		return
+	}
+	encodeResponse(w, competition)
 }
 
 func encodeResponse(w http.ResponseWriter, response interface{}) {
