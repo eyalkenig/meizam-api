@@ -93,6 +93,24 @@ func (controller *Controller) CreateCompetition(w http.ResponseWriter, req *http
 	encodeResponse(w, competition)
 }
 
+func (controller *Controller) ListCompetitions(w http.ResponseWriter, req *http.Request) {
+	w.Header().Set("Content-Type", "application/json; charset=UTF-8")
+	page, perPage, err := getPageParams(w, req)
+	if err != nil {
+		handleServerError(w, http.StatusBadRequest, err)
+		return
+	}
+	offset := page * perPage
+	teams, err := controller.service.ListCompetitions(perPage, offset)
+
+	if err != nil {
+		handleServerError(w, http.StatusInternalServerError, err)
+		return
+	}
+
+	encodeResponse(w, teams)
+}
+
 func encodeResponse(w http.ResponseWriter, response interface{}) {
 	err := json.NewEncoder(w).Encode(response)
 	if err != nil {

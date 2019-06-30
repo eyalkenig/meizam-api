@@ -53,3 +53,16 @@ func (mysql *MySQL) CreateCompetition(name, competitionType string, externalEnti
 	}
 	return competition, nil
 }
+
+func (mysql *MySQL) ListCompetitions(limit, offset int) ([]*models.Competition, error) {
+	competitions, err := models.Competitions(
+		Limit(limit),
+		Offset(offset),
+	).All(context.Background(), mysql.db)
+
+	if err != nil {
+		log.Println(fmt.Sprintf("Failed listing competitions: %s, limit: %d, offset: %d", err.Error(), limit, offset))
+		return nil, err
+	}
+	return competitions, nil
+}

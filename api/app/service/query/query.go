@@ -16,3 +16,7 @@ type MeizamQuery struct {
 func (query *MeizamQuery) ListTeams(limit, offset int) ([]*models.Team, error) {
 	return query.repository.ListTeams(limit, offset)
 }
+
+func (query *MeizamQuery) ListCompetitions(limit, offset int) ([]*models.Competition, error) {
+	return query.repository.ListCompetitions(limit, offset)
+}
