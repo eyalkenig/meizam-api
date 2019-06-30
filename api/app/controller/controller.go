@@ -61,16 +61,9 @@ func (controller *Controller) CreateTeam(w http.ResponseWriter, req *http.Reques
 
 func (controller *Controller) ListTeams(w http.ResponseWriter, req *http.Request) {
 	w.Header().Set("Content-Type", "application/json; charset=UTF-8")
-	pageUrlParam := getUrlParamWithDefault(req, "page", "0")
-	page, err := strconv.Atoi(pageUrlParam)
-	if err != nil || page < 0 {
-		handleServerError(w, http.StatusBadRequest, errors.New("page must be a positive number"))
-		return
-	}
-	perPageParam := getUrlParamWithDefault(req, "per_page", "10")
-	perPage, err := strconv.Atoi(perPageParam)
-	if err != nil || perPage < 0 {
-		handleServerError(w, http.StatusBadRequest, errors.New("per_page must be a positive number"))
+	page, perPage, err := getPageParams(w, req)
+	if err != nil {
+		handleServerError(w, http.StatusBadRequest, err)
 		return
 	}
 	offset := page * perPage
@@ -98,6 +91,24 @@ func (controller *Controller) CreateCompetition(w http.ResponseWriter, req *http
 		return
 	}
 	encodeResponse(w, competition)
+}
+
+func (controller *Controller) ListCompetitions(w http.ResponseWriter, req *http.Request) {
+	w.Header().Set("Content-Type", "application/json; charset=UTF-8")
+	page, perPage, err := getPageParams(w, req)
+	if err != nil {
+		handleServerError(w, http.StatusBadRequest, err)
+		return
+	}
+	offset := page * perPage
+	teams, err := controller.service.ListCompetitions(perPage, offset)
+
+	if err != nil {
+		handleServerError(w, http.StatusInternalServerError, err)
+		return
+	}
+
+	encodeResponse(w, teams)
 }
 
 func encodeResponse(w http.ResponseWriter, response interface{}) {
@@ -139,4 +150,18 @@ func getRequestBody(w http.ResponseWriter, req *http.Request, value interface{})
 		return err
 	}
 	return nil
+}
+
+func getPageParams(w http.ResponseWriter, req *http.Request) (page int, perPage int, err error) {
+	pageUrlParam := getUrlParamWithDefault(req, "page", "0")
+	page, err = strconv.Atoi(pageUrlParam)
+	if err != nil || page < 0 {
+		return -1, -1, errors.New("page must be a positive number")
+	}
+	perPageParam := getUrlParamWithDefault(req, "per_page", "10")
+	perPage, err = strconv.Atoi(perPageParam)
+	if err != nil || perPage < 0 {
+		return -1, -1, errors.New("per_page must be a positive number")
+	}
+	return page, perPage, nil
 }

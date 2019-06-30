@@ -1,5 +1,5 @@
 #!/bin/bash
 BASE_APP_PATH="github.com/eyalkenig/meizam-api/api/app"
 
-mockgen -source="$GOPATH/src/${BASE_APP_PATH}/service/service.go" -destination="$GOPATH/src/${BASE_APP_PATH}/service/mock_service/service.go"
-mockgen -source="$GOPATH/src/${BASE_APP_PATH}/repository/repository.go" -destination="$GOPATH/src/${BASE_APP_PATH}/repository/mock_repository/repository.go"
+$GOPATH/bin/mockgen -source="$GOPATH/src/${BASE_APP_PATH}/service/service.go" -destination="$GOPATH/src/${BASE_APP_PATH}/service/mock_service/service.go"
+$GOPATH/bin/mockgen -source="$GOPATH/src/${BASE_APP_PATH}/repository/repository.go" -destination="$GOPATH/src/${BASE_APP_PATH}/repository/mock_repository/repository.go"

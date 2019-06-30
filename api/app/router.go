@@ -1,65 +1,80 @@
 package app
 
 import (
+	"github.com/codegangsta/negroni"
 	"log"
 	"net/http"
 
 	"github.com/eyalkenig/meizam-api/api/app/controller"
 
+	jwtmiddleware "github.com/auth0/go-jwt-middleware"
 	"github.com/gorilla/mux"
 )
 
 type Route struct {
-	Name        string
-	Method      string
-	Pattern     string
-	HandlerFunc http.HandlerFunc
+	Name          string
+	Method        string
+	Pattern       string
+	HandlerFunc   http.HandlerFunc
+	Authenticated bool
 }
 
 type Routes []Route
 
-func NewRouter(controller *controller.Controller) *mux.Router {
-	routes := defineRoutes(controller)
+func NewRouter(controller *controller.Controller, middleware *jwtmiddleware.JWTMiddleware) *mux.Router {
+	authRoutes := defineAuthenticatedRoutes(controller)
 	router := mux.NewRouter().StrictSlash(true)
-	for _, route := range routes {
-		var handler http.Handler
-		log.Println(route.Name)
-		handler = route.HandlerFunc
+	for _, appRoute := range authRoutes {
+		log.Println(appRoute.Name)
 
-		router.
-			Methods(route.Method).
-			Path(route.Pattern).
-			Name(route.Name).
-			Handler(handler)
+		route := router.
+			Methods(appRoute.Method).
+			Path(appRoute.Pattern).
+			Name(appRoute.Name)
+		if appRoute.Authenticated {
+			route.Handler(negroni.New(negroni.HandlerFunc(middleware.HandlerWithNext), negroni.Wrap(appRoute.HandlerFunc)))
+		} else {
+			route.Handler(appRoute.HandlerFunc)
+		}
 	}
 	return router
 }
-
-func defineRoutes(controller *controller.Controller) []Route {
+func defineAuthenticatedRoutes(controller *controller.Controller) []Route {
 	var routes = Routes{
 		Route{
 			"ping",
 			"GET",
 			"/ping",
 			controller.Ping,
+			false,
 		},
 		Route{
 			"create team",
 			"POST",
 			"/teams",
 			controller.CreateTeam,
+			true,
 		},
 		Route{
 			"list team",
 			"GET",
 			"/teams",
 			controller.ListTeams,
+			true,
 		},
 		Route{
 			"create competition",
-			"post",
+			"POST",
 			"/competitions",
 			controller.CreateCompetition,
+			true,
+		},
+		Route{
+			"list competition",
+			"GET",
+			"/competitions",
+			controller.ListCompetitions,
+			true,
 		},
 	}
 	return routes
