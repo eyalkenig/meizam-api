@@ -7,7 +7,7 @@ import (
 	. "github.com/onsi/gomega"
 )
 
-func TestController(t *testing.T) {
+func TestCommand(t *testing.T) {
 	RegisterFailHandler(Fail)
 	RunSpecs(t, "Command Suite")
 }
