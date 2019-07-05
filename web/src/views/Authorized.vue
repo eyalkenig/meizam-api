@@ -16,7 +16,6 @@ export default class Authorized extends Vue {
       await auth.handleAuthentication()
     } catch (e) {
       this.$router.push('/')
-      console.error(e)
     }
   }
 }
