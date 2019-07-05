@@ -20,6 +20,9 @@ func (f *Builder) Build() (*jwtmiddleware.JWTMiddleware, error) {
 		log.Fatalf("failed loading configuration for auth: %s", err.Error())
 		return nil, err
 	}
+	if !conf.RequireAuth {
+		return nil, nil
+	}
 	return GetJwtMiddleware(conf.Domain, conf.Audience), nil
 }
 
