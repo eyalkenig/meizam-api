@@ -31,7 +31,7 @@ func NewRouter(controller *controller.Controller, middleware *jwtmiddleware.JWTM
 			Methods(appRoute.Method).
 			Path(appRoute.Pattern).
 			Name(appRoute.Name)
-		if appRoute.Authenticated {
+		if appRoute.Authenticated && middleware != nil {
 			route.Handler(negroni.New(negroni.HandlerFunc(middleware.HandlerWithNext), negroni.Wrap(appRoute.HandlerFunc)))
 		} else {
 			route.Handler(appRoute.HandlerFunc)
