@@ -52,13 +52,13 @@ class AuthService {
     }
     return (Date.now() < parseInt(idTokenExpiry, 10))
   }
-  getAccessToken (): Promise<boolean> {
+  async getAccessToken (): Promise<string> {
     return new Promise((resolve, reject) => {
       if (this.isAccessTokenValid()) {
-        resolve(true)
+        resolve(localStorage.getItem(idTokenKey) || '')
       } else {
         this.renewTokens().then(authResult => {
-          resolve(true)
+          resolve(localStorage.getItem(idTokenKey) || '')
         }, reject)
       }
     })
