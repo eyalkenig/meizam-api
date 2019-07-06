@@ -3,8 +3,10 @@ package auth
 import (
 	"encoding/json"
 	"errors"
+	"fmt"
 	jwtmiddleware "github.com/auth0/go-jwt-middleware"
 	"github.com/dgrijalva/jwt-go"
+	"log"
 	"net/http"
 )
 
@@ -24,7 +26,9 @@ type JSONWebKeys struct {
 func GetJwtMiddleware(auth0Domain, auth0Audience string) *jwtmiddleware.JWTMiddleware {
 	return jwtmiddleware.New(jwtmiddleware.Options{
 		ValidationKeyGetter: func(token *jwt.Token) (interface{}, error) {
+			log.Println(fmt.Sprintf("jwt: desired audience: %s", auth0Audience))
 			aud := auth0Audience
+			log.Println(fmt.Sprintf("jwt: jwt claims: %s", token.Claims.(jwt.MapClaims)))
 			checkAud := token.Claims.(jwt.MapClaims).VerifyAudience(aud, false)
 			if !checkAud {
 				return token, errors.New("invalid audience")
