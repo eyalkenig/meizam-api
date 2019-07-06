@@ -35,8 +35,7 @@ router.beforeEach((to, from, next) => {
   if (to.path === '/' || to.path === '/callback' || auth.isAuthenticated()) {
     return next()
   }
-
-  auth.login(to.path, process.env.AUDIENCE)
+  auth.login(to.path, process.env.VUE_APP_AUDIENCE)
 })
 
 export default router
