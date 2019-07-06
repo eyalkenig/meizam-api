@@ -5,7 +5,6 @@ import Authorized from './views/Authorized.vue'
 import auth from './services/auth-service'
 
 Vue.use(Router)
-process.env.audience = 'https://meizam-2020.herokuapp.com'
 
 const router = new Router({
   mode: 'history',
@@ -36,8 +35,7 @@ router.beforeEach((to, from, next) => {
   if (to.path === '/' || to.path === '/callback' || auth.isAuthenticated()) {
     return next()
   }
-
-  auth.login(to.path, process.env.audience)
+  auth.login(to.path, process.env.VUE_APP_AUDIENCE)
 })
 
 export default router

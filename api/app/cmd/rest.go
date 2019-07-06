@@ -33,10 +33,11 @@ func getRESTRunFunction(port string) func(cmd *cobra.Command, args []string) {
 
 		allowedOrigins := handlers.AllowedOrigins([]string{"*"})
 		allowedMethods := handlers.AllowedMethods([]string{"GET", "POST", "DELETE", "PUT"})
+		allowedHeaders := handlers.AllowedHeaders([]string{"Authorization"})
 
 		go func() {
 			log.Println("Starting application server")
-			log.Fatal(http.ListenAndServe(":"+port, handlers.CORS(allowedOrigins, allowedMethods)(application.Router)))
+			log.Fatal(http.ListenAndServe(":"+port, handlers.CORS(allowedOrigins, allowedMethods, allowedHeaders)(application.Router)))
 		}()
 
 		signalsChan := make(chan os.Signal)
