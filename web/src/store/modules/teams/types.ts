@@ -5,10 +5,10 @@ export const GET_TEAMS = 'teams/GET_TEAMS'
 export interface Team {
     id: number;
     name: string;
-    image_url: string|null;
-    external_entity_id: string|null;
-    created_at: Date;
-    updated_at: Date;
+    imageUrl: string|null;
+    externalEntityId: string|null;
+    createdAt: Date;
+    updatedAt: Date;
 }
 
 export interface TeamState {
