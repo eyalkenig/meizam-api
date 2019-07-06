@@ -4,6 +4,7 @@ import (
 	"context"
 	"database/sql"
 	"fmt"
+	migrate "github.com/rubenv/sql-migrate"
 	"log"
 
 	"github.com/eyalkenig/meizam-api/api/app/repository/mysql/models"
@@ -21,11 +22,20 @@ func NewMySQL(db *sql.DB) *MySQL {
 	return &MySQL{db: db}
 }
 
+func (mysql *MySQL) Migrate() (int, error) {
+	migrate.SetTable("schema_migrations")
+	migrations := &migrate.FileMigrationSource{
+		Dir: "migrations",
+	}
+
+	return migrate.Exec(mysql.db, "mysql", migrations, migrate.Up)
+}
+
 func (mysql *MySQL) CreateTeam(teamName string, externalEntityId, imageUrl *string) (*models.Team, error) {
 	team := &models.Team{Name: teamName, ExternalEntityID: null.StringFromPtr(externalEntityId), ImageURL: null.StringFromPtr(imageUrl)}
 	err := team.Insert(context.Background(), mysql.db, boil.Infer())
 	if err != nil {
-		log.Println(fmt.Sprintf("Failed creating unsubscriber: %s", err.Error()))
+		log.Println(fmt.Sprintf("Failed creating team: %s", err.Error()))
 		return nil, err
 	}
 	return team, nil
