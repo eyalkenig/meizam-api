@@ -32,7 +32,7 @@ func getRESTRunFunction(port string) func(cmd *cobra.Command, args []string) {
 		}
 
 		allowedOrigins := handlers.AllowedOrigins([]string{"*"})
-		allowedMethods := handlers.AllowedMethods([]string{"GET", "POST", "DELETE", "PUT"})
+		allowedMethods := handlers.AllowedMethods([]string{"GET", "POST", "DELETE", "PUT", "OPTIONS"})
 		allowedHeaders := handlers.AllowedHeaders([]string{"Authorization"})
 
 		go func() {
