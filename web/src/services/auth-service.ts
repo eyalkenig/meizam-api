@@ -1,5 +1,6 @@
 import auth0, { Auth0DecodedHash } from 'auth0-js'
 import authConfig from '../../auth_config.json'
+import Router from '@/router'
 
 const webAuth = new auth0.WebAuth({
   domain: authConfig.domain,
@@ -25,7 +26,7 @@ class AuthService {
   localLogin (authResult: Auth0DecodedHash) {
     localStorage.setItem(loggedInKey, 'true')
     localStorage.setItem(idTokenKey, authResult.idToken || '')
-    const idTokenExpiry = Date.now() + (authResult.idTokenPayload.exp || 0) * 1000
+    const idTokenExpiry = (authResult.idTokenPayload.exp || 0) * 1000
     localStorage.setItem(idTokenExpiryKey, idTokenExpiry.toString())
   }
   handleAuthentication (): Promise<string> {
@@ -53,13 +54,15 @@ class AuthService {
     return (Date.now() < parseInt(idTokenExpiry, 10))
   }
   async getAccessToken (): Promise<string> {
-    return new Promise((resolve, reject) => {
+    return new Promise((resolve) => {
       if (this.isAccessTokenValid()) {
         resolve(localStorage.getItem(idTokenKey) || '')
       } else {
         this.renewTokens().then(authResult => {
           resolve(localStorage.getItem(idTokenKey) || '')
-        }, reject)
+        }).catch(e => {
+          Router.push('/login')
+        })
       }
     })
   }
