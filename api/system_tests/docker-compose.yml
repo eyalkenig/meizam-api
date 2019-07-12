@@ -13,14 +13,14 @@ services:
       MYSQL_USER: awesome_user
       MYSQL_PASSWORD: vladopen
     ports:
-      - "${HOST_MYSQL_PORT}:3306"
+      - "${HOST_MYSQL_PORT}:3307"
 
   migrate:
     depends_on:
       - db
     environment:
       MYSQL_HOST: db
-      MYSQL_PORT: 3306
+      MYSQL_PORT: 3307
       MYSQL_DATABASE: meizamDB
       MYSQL_USERNAME: awesome_user
       MYSQL_PASSWORD: vladopen
@@ -34,6 +34,11 @@ services:
   rest:
     image: ${DOCKER_IMAGE_URL}
     environment:
+      MYSQL_HOST: db
+      MYSQL_PORT: 3307
+      MYSQL_DATABASE: meizamDB
+      MYSQL_USERNAME: awesome_user
+      MYSQL_PASSWORD: vladopen
       PORT: 12345
     restart: always
     ports:

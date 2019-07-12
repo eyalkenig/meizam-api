@@ -23,7 +23,7 @@ func getMigrateRunFunction() func(cmd *cobra.Command, args []string) {
 	return func(cmd *cobra.Command, args []string) {
 		mysqlBuilder := mysql.NewBuilder()
 		mysql, err := mysqlBuilder.Build()
-
+		log.Println("trying to run migrations")
 		if err != nil {
 			log.Println("Failed creating a new MySQL instance: " + err.Error())
 			return
