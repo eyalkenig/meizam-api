@@ -1,0 +1,50 @@
+version: '3.3'
+
+services:
+  db:
+    image: mysql:8.0.13
+    command: --sql_mode="ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION"
+    volumes:
+      - db_data:/var/lib/mysql
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: somewordpress
+      MYSQL_DATABASE: meizamDB
+      MYSQL_USER: awesome_user
+      MYSQL_PASSWORD: vladopen
+    ports:
+      - "${HOST_MYSQL_PORT}:3307"
+
+  migrate:
+    depends_on:
+      - db
+    environment:
+      MYSQL_HOST: db
+      MYSQL_PORT: 3307
+      MYSQL_DATABASE: meizamDB
+      MYSQL_USERNAME: awesome_user
+      MYSQL_PASSWORD: vladopen
+      PORT: 54321
+      REQUIRE_AUTH: "false"
+    image: ${DOCKER_IMAGE_URL}
+    restart: on-failure
+    entrypoint: ["/bin/go-meizam-api"]
+    command: "migrate"
+
+  rest:
+    image: ${DOCKER_IMAGE_URL}
+    environment:
+      MYSQL_HOST: db
+      MYSQL_PORT: 3307
+      MYSQL_DATABASE: meizamDB
+      MYSQL_USERNAME: awesome_user
+      MYSQL_PASSWORD: vladopen
+      PORT: 12345
+    restart: always
+    ports:
+      - "${HOST_GATEWAY_PORT}:8081"
+    entrypoint: ["/bin/go-meizam-api"]
+    command: "rest"
+
+volumes:
+  db_data: {}

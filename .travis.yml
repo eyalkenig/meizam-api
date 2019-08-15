@@ -1,11 +1,22 @@
+group: edge
+
 sudo: required
 
+services:
+  - docker
+
+env:
+  global:
+    - PROJECT: meizam
+    - CONTAINER_REGISTRY_HOST: eyalkenig
+
 stages:
-  - test api
+  - build app
+  - system tests
 
 jobs:
   include:
-    - stage: test api
+    - stage: build app
       language: go
       go:
         - 1.12
@@ -13,7 +24,30 @@ jobs:
         - GOOS: linux
         - GOARCH: amd64
         - CGO_ENABLED: 0
-      before_script: cd api
-      script:
+      before_install:
+        - cd api
+      install:
+        - make dependencies
+      before_script:
         - make gofmt
         - make test
+        - make build
+      script:
+        - ./build/build_app_docker.sh
+        - ./build/push_app_docker.sh
+    - stage: system tests
+      language: go
+      go:
+        - 1.12
+      env:
+        - DOCKER_IMAGE_URL: ${CONTAINER_REGISTRY_HOST}/${PROJECT}:${TRAVIS_COMMIT}
+        - HOST_GATEWAY_PORT: 8081
+        - HOST_MYSQL_PORT: 3316
+        - GATEWAY_URI: "127.0.0.1:${HOST_GATEWAY_PORT}"
+      before_install:
+        - cd api
+      install:
+        - go get -t ./system_tests/...
+      script:
+        - docker-compose -f ./system_tests/docker-compose.yml up -d
+        - make system_tests

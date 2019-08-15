@@ -15,6 +15,7 @@ func RootCommand() *cobra.Command {
 
 func Execute(port string) {
 	rootCmd.AddCommand(NewRESTCommand(port))
+	rootCmd.AddCommand(NewMigrateCommand())
 	if err := rootCmd.Execute(); err != nil {
 		fmt.Println(err)
 		os.Exit(1)
